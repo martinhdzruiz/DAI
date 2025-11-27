@@ -21,19 +21,26 @@ const cambiar_precio = (evt) => {
     })
     .then(res => res.json())
     .then(res => {
-        console.log("⬅ Respuesta API:", res);
+    console.log("⬅ Respuesta API:", res);
 
-        if (res.error) {
-            mensaje.textContent = "❌ " + res.error;
-            mensaje.style.color = "red";
-        } else {
-            mensaje.textContent = "✔ Precio actualizado";
-            mensaje.style.color = "green";
-            if (typeof res.precio_euros !== "undefined") {
-                input.value = res.precio_euros;
+    if (res.error) {
+        mensaje.textContent = "❌ " + res.error;
+        mensaje.style.color = "red";
+    } else {
+        mensaje.textContent = "✔ Precio actualizado";
+        mensaje.style.color = "green";
+
+        if (typeof res.precio_euros !== "undefined") {
+            input.value = res.precio_euros;
+
+            // ACTUALIZAR EL PRECIO VISUAL DEL PRODUCTO (sin recargar)
+            const etiquetaPrecio = document.querySelector(`.precio-valor[data-id="${id}"]`);
+            if (etiquetaPrecio) {
+                etiquetaPrecio.textContent = res.precio_euros + " €";
             }
         }
-    })
+    }
+})
     .catch(err => {
         console.error("❌ Error fetch:", err);
         mensaje.textContent = "❌ Error de conexión";

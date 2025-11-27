@@ -26,9 +26,10 @@
                 </span>
                 <span class="precio-unidad">{{ producto.unidad_medida }}</span>
                 {% else %}
-                <span class="precio-valor">
+                <span class="precio-valor" data-id="{{ producto._id }}">
                     {{ producto.precio_euros }} €
                 </span>
+
                 <span class="precio-unidad">{{ producto.unidad_medida }}</span>
                 {% endif %}
             </div>
