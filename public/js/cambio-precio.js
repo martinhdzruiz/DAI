@@ -24,7 +24,7 @@ const cambiar_precio = (evt) => {
     console.log("⬅ Respuesta API:", res);
 
     if (res.error) {
-        mensaje.textContent = "❌ " + res.error;
+        mensaje.textContent = "Error " + res.error;
         mensaje.style.color = "red";
     } else {
         mensaje.textContent = "✔ Precio actualizado";
@@ -42,14 +42,14 @@ const cambiar_precio = (evt) => {
     }
 })
     .catch(err => {
-        console.error("❌ Error fetch:", err);
-        mensaje.textContent = "❌ Error de conexión";
+        console.error("Error fetch:", err);
+        mensaje.textContent = "Error de conexión";
         mensaje.style.color = "red";
     });
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("✅ cambio-precio.js cargado");
+    console.log("cambio-precio.js cargado");
 
     const botones = document.querySelectorAll(".btn-cambiar-precio");
     for (const boton of botones) {

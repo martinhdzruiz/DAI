@@ -170,9 +170,6 @@ router.delete("/:id", async (req, res) => {
  *         description: Producto actualizado
  */
 router.put("/:id", async (req, res) => {
-    console.log("🔥 PUT /api/productos/:id ha llegado al router REAL");
-
-
     try {
         const cambios = {};
 
@@ -196,9 +193,53 @@ router.put("/:id", async (req, res) => {
         res.json(actualizado);
 
     } catch (err) {
-        console.error("❌ ERROR REAL EN PUT:", err);
+        console.error("ERROR REAL EN PUT:", err);
         res.status(400).json({ error: "ID inválido" });
     }
 });
+
+/**
+ * @swagger
+ * /api/busqueda-anticipada/{texto}:
+ *   get:
+ *     summary: Búsqueda anticipada de productos
+ *     tags: [Productos]
+ *     parameters:
+ *       - name: texto
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Lista de productos coincidentes
+ */
+router.get("/busqueda-anticipada/:texto", async (req, res) => {
+
+    try {
+        const texto = req.params.texto;
+
+        if (texto.length < 1)
+            return res.json([]);
+
+        const regex = new RegExp(texto, "i"); // búsqueda case-insensitive
+
+        const productos = await Producto.find({
+            $or: [
+                { texto_1: regex },
+                { texto_2: regex },
+                { categoria: regex },
+                { subcategoria: regex }
+            ]
+        }).limit(50); // limitar para que no devuelva 1800 productos
+
+        res.json(productos);
+
+    } catch (err) {
+        console.error("❌ ERROR en búsqueda anticipada:", err);
+        res.status(500).json({ error: "Error en la búsqueda" });
+    }
+});
+
 
 export default router;

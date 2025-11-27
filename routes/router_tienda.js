@@ -165,6 +165,10 @@ router.get('/al_carrito/:id', async (req, res) => {
     }
 });
 
+router.get("/busqueda", (req, res) => {
+    res.render("busqueda.html");
+});
+
 
 
 // Eliminar un producto del carrito
