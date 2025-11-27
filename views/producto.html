@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}{{ producto.texto_1 }} - Tienda{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <!-- Imagen producto -->
+        <div class="col-md-5 producto-detalle__imagen text-center">
+            <img src="{{ producto.url_img }}" alt="{{ producto.texto_1 }}">
+        </div>
+
+        <!-- Información producto -->
+        <div class="col-md-7">
+            <h1 class="producto-detalle__titulo">{{ producto.texto_1 }}</h1>
+            <p class="producto-detalle__subtitulo">{{ producto.texto_2 }}</p>
+
+            <!-- Precio -->
+            <div class="producto-detalle__precio mt-3">
+                {% if producto.precio_rebajado and producto.precio_rebajado > 0 %}
+                <span class="product-card__price-old">
+                    {{ producto.precio_euros }} €
+                </span>
+                <span class="precio-valor text-danger">
+                    {{ producto.precio_rebajado }} €
+                </span>
+                <span class="precio-unidad">{{ producto.unidad_medida }}</span>
+                {% else %}
+                <span class="precio-valor">
+                    {{ producto.precio_euros }} €
+                </span>
+                <span class="precio-unidad">{{ producto.unidad_medida }}</span>
+                {% endif %}
+            </div>
+
+            <!-- Botón Añadir al carro -->
+            <div class="mt-4">
+                <a href="/al_carrito/{{ producto._id }}" class="btn btn--cart">
+                    Añadir al carrito
+                </a>
+            </div>
+            <div class="producto">
+                <strong>{{ producto.texto_1 }}</strong><br>
+
+                <input type="number" class="input-precio" value="{{ producto.precio_euros }}"
+                    data-id="{{ producto._id }}">
+
+                <button class="btn-cambiar-precio" data-id="{{ producto._id }}">
+                    Cambiar precio
+                </button>
+
+                <span class="mensaje"></span>
+            </div>
+
+
+
+            <!-- Información adicional -->
+            <div class="producto-detalle__info mt-4">
+                <h5>Detalles del producto</h5>
+                <p><strong>Categoría:</strong> {{ producto.categoria }}</p>
+                {% if producto.subcategoria %}
+                <p><strong>Subcategoría:</strong> {{ producto.subcategoria }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

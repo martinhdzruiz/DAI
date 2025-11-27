@@ -1,0 +1,191 @@
+import express from "express";
+import Producto from "../model/Producto.js";
+
+const router = express.Router();
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Producto:
+ *       type: object
+ *       required:
+ *         - supercategoria
+ *         - categoria
+ *       properties:
+ *         supercategoria:
+ *           type: string
+ *         categoria:
+ *           type: string
+ *         subcategoria:
+ *           type: string
+ *         url_img:
+ *           type: string
+ *         texto_1:
+ *           type: string
+ *         texto_2:
+ *           type: string
+ *         precio_euros:
+ *           type: number
+ *         precio_rebajado:
+ *           type: number
+ *         unidad_medida:
+ *           type: string
+ */
+
+/**
+ * @swagger
+ * /api/productos:
+ *   get:
+ *     summary: Obtiene todos los productos
+ *     tags: [Productos]
+ *     responses:
+ *       200:
+ *         description: Lista de productos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Producto'
+ */
+router.get("/", async (req, res) => {
+    try {
+        const productos = await Producto.find();
+        res.json(productos);
+    } catch (err) {
+        res.status(500).json({ error: "Error obteniendo productos" });
+    }
+});
+
+
+/**
+ * @swagger
+ * /api/productos/{id}:
+ *   get:
+ *     summary: Obtiene un producto por su ID
+ *     tags: [Productos]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Producto encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Producto'
+ *       404:
+ *         description: Producto no encontrado
+ */
+router.get("/:id", async (req, res) => {
+    try {
+        const producto = await Producto.findById(req.params.id);
+        if (!producto) return res.status(404).json({ error: "Producto no encontrado" });
+        res.json(producto);
+    } catch (err) {
+        res.status(400).json({ error: "ID inválido" });
+    }
+});
+
+
+/**
+ * @swagger
+ * /api/productos:
+ *   post:
+ *     summary: Crea un nuevo producto
+ *     tags: [Productos]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Producto'
+ *     responses:
+ *       201:
+ *         description: Producto creado correctamente
+ */
+router.post("/", async (req, res) => {
+    try {
+        const nuevo = new Producto(req.body);
+        await nuevo.save();
+        res.status(201).json(nuevo);
+    } catch (err) {
+        res.status(400).json({ error: "Error creando producto" });
+    }
+});
+
+
+/**
+ * @swagger
+ * /api/productos/{id}:
+ *   delete:
+ *     summary: Elimina un producto por ID
+ *     tags: [Productos]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *     responses:
+ *       200:
+ *         description: Producto eliminado
+ */
+router.delete("/:id", async (req, res) => {
+    try {
+        const eliminado = await Producto.findByIdAndDelete(req.params.id);
+        if (!eliminado) return res.status(404).json({ error: "Producto no encontrado" });
+        res.json({ mensaje: "Producto eliminado" });
+    } catch (err) {
+        res.status(400).json({ error: "ID inválido" });
+    }
+});
+
+
+/**
+ * @swagger
+ * /api/productos/{id}:
+ *   put:
+ *     summary: Actualiza el precio de un producto
+ *     tags: [Productos]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               precio_euros:
+ *                 type: number
+ *               precio_rebajado:
+ *                 type: number
+ *     responses:
+ *       200:
+ *         description: Producto actualizado
+ */
+router.put("/:id", async (req, res) => {
+    try {
+        const { precio_euros, precio_rebajado } = req.body;
+
+        const actualizado = await Producto.findByIdAndUpdate(
+            req.params.id,
+            { precio_euros, precio_rebajado },
+            { new: true }
+        );
+
+        if (!actualizado) return res.status(404).json({ error: "Producto no encontrado" });
+
+        res.json(actualizado);
+
+    } catch (err) {
+        res.status(400).json({ error: "ID inválido" });
+    }
+});
+
+export default router;

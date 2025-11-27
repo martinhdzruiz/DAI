@@ -1,0 +1,37 @@
+### TODOS LOS PRODUCTOS
+GET http://localhost:8080/api/productos
+
+###
+
+### PRODUCTO POR ID
+GET http://localhost:8080/api/productos/691fa08507979f908e766af7
+
+###
+
+### CREAR PRODUCTO
+POST http://localhost:8080/api/productos
+Content-Type: application/json
+
+{
+  "texto_1": "Pan",
+  "texto_2": "Integral 500g",
+  "precio_euros": 1.20,
+  "precio_rebajado": 0.99,
+  "categoria": "Alimentación"
+}
+
+###
+
+### ELIMINAR PRODUCTO
+DELETE http://localhost:8080/api/productos/691fa08507979f908e766af8
+
+###
+
+### ACTUALIZAR PRECIO
+PUT http://localhost:8080/api/productos/691fa08507979f908e766afa
+Content-Type: application/json
+
+{
+  "precio_euros": 3.50,
+  "precio_rebajado": 2.99
+}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Carrito - Tienda{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Mi Carrito</h2>
+
+    {% if carrito.length == 0 %}
+    <p>No hay productos en el carrito.</p>
+    {% else %}
+    <ul class="list-group mb-3">
+        {% for p in carrito %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <strong>{{ p.texto_1 }}</strong><br>
+                <small>{{ p.texto_2 }}</small>
+            </div>
+            <span>
+                {% if p.precio_rebajado and p.precio_rebajado > 0 %}
+                {{ p.precio_rebajado }} €
+                {% else %}
+                {{ p.precio_euros }} €
+                {% endif %}
+            </span>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <div class="text-end">
+        <h4>Total: {{ total }} €</h4>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

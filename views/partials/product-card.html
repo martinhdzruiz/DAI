@@ -1,0 +1,24 @@
+<div class="product-card">
+    <a href="/producto/{{ p._id }}">
+        <img src="{{ p.url_img }}" alt="{{ p.texto_1 }}">
+    </a>
+    <a href="/producto/{{ p._id }}" class="product-card__name d-block mt-2">
+        {{ p.texto_1 }}
+    </a>
+    <p class="product-card__subtitle">{{ p.texto_2 }}</p>
+
+    <div class="precio">
+        {% if p.precio_rebajado and p.precio_rebajado > 0 %}
+            <span class="product-card__price-old">{{ p.precio_euros }} €</span>
+            <span class="precio-valor text-danger">{{ p.precio_rebajado }} €</span>
+            <span class="precio-unidad">{{ p.unidad_medida }}</span>
+        {% else %}
+            <span class="precio-valor">{{ p.precio_euros }} €</span>
+            <span class="precio-unidad">{{ p.unidad_medida }}</span>
+        {% endif %}
+    </div>
+
+    <div class="product-card__actions mt-3">
+        <a href="/al_carrito/{{ p._id }}" class="btn btn--cart">Añadir al carrito</a>
+    </div>
+</div>

@@ -1,0 +1,308 @@
+:root {
+    --cucumber: #009640;
+    /* verde Mercadona */
+    --tomato: #e60000;
+    /* rojo Mercadona */
+    --smoked-40: #999;
+    --white-cream: #f8f8f8;
+    --mercadona-yellow: #ffb84d;
+}
+
+/* === CABECERA === */
+/* CABECERA FIJA */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1050; /* siempre por encima */
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+}
+
+/* espacio debajo de la cabecera */
+body {
+    padding-top: 70px;
+}
+
+/* LAYOUT GENERAL */
+.layout {
+    display: flex;
+    min-height: calc(100vh - 70px); /* ocupa toda la altura menos la cabecera */
+}
+
+/* SIDEBAR FIJO */
+.sidebar {
+    position: sticky;
+    top: 70px; /* debajo de la cabecera */
+    height: calc(100vh - 70px);
+    overflow-y: auto;
+    background: #fff;
+    border-right: 1px solid #eee;
+    padding: 15px;
+}
+
+/* CONTENIDO */
+.content {
+    flex: 1;
+    padding: 20px;
+    overflow-x: hidden;
+}
+
+.header__logo img {
+    height: 30px;
+}
+
+/* Buscador */
+/* Contenedor de buscador */
+.search-bar {
+    position: relative;
+    max-width: 300px;   /* ancho limitado */
+    flex: 0 0 auto;
+}
+
+/* Icono lupa dentro del input */
+.search-bar i {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #888;
+    font-size: 1rem;
+    pointer-events: none; /* que no bloquee el clic */
+}
+
+/* Input con padding extra a la izquierda */
+.search-input {
+    width: 100%;
+    padding: 0.4rem 0.8rem 0.4rem 2rem; /* espacio para la lupa */
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    font-size: 0.9rem;
+}
+.search-btn {
+    border-radius: 25px;
+    padding: 0.5rem 1rem;
+    background-color: var(--cucumber);
+    border: none;
+    color: #fff;
+}
+
+.search-btn:hover {
+    background-color: #007f34;
+}
+
+/* Navegación */
+.header__nav .nav-link {
+    color: #333;
+    margin-left: 15px;
+    font-size: 0.95rem;
+}
+
+.header__nav .nav-link:hover {
+    color: var(--cucumber);
+    text-decoration: none;
+}
+
+/* === CARRITO === */
+/* === CARRITO === */
+.carrito-box {
+    background-color: #ffcc00;
+    /* amarillo Mercadona */
+    padding: 5px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #4a2e00;
+    /* marrón Mercadona */
+    font-weight: bold;
+    border: none;
+}
+
+.carrito-box:hover {
+    background-color: #ffdb4d;
+    text-decoration: none;
+    color: #2e1c00;
+}
+
+.carrito-box-empty {
+    padding: 5px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #4a2e00;
+    border: none;
+    background: transparent;
+    /* carrito vacío */
+}
+
+.carrito-box-empty:hover {
+    background-color: #f3f3f3;
+    text-decoration: none;
+}
+
+.badge.bg-brown {
+    background-color: #4a2e00;
+    color: #fff;
+    border-radius: 50%;
+    padding: 0.4em 0.6em;
+    font-size: 0.85rem;
+}
+
+.carrito-total {
+    font-size: 0.95rem;
+}
+
+.btn-outline-danger {
+    border-radius: 20px;
+    font-size: 0.8rem;
+    padding: 2px 8px;
+}
+
+/* === PRODUCTOS === */
+.product-card {
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    width: 220px;
+    min-height: 350px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.product-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-3px);
+}
+
+.product-card img {
+    max-height: 160px;
+    object-fit: contain;
+    margin: auto;
+}
+
+.product-card__name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #000;
+    text-decoration: none;
+}
+
+.product-card__name:hover {
+    color: var(--cucumber);
+    text-decoration: underline;
+}
+
+.product-card__subtitle {
+    font-size: 0.85rem;
+    color: #666;
+    margin: 0;
+}
+
+/* === PRECIOS === */
+.precio {
+    margin-top: 8px;
+}
+
+/* Precio normal */
+.precio-valor {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #000;
+}
+
+/* Unidad de medida */
+.precio-unidad {
+    font-size: 0.85rem;
+    color: #666;
+    margin-left: 4px;
+}
+
+/* Precio rebajado */
+.precio-valor.text-danger {
+    color: var(--tomato) !important;
+    font-weight: bold;
+}
+
+.product-card__price-old {
+    font-size: 0.9rem;
+    color: #888;
+    text-decoration: line-through;
+    margin-right: 6px;
+}
+
+/* === GRID === */
+.product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+/* === BOTONES === */
+.btn--cart {
+    background-color: #fff;
+    color: #000;
+    font-weight: 600;
+    border-radius: 50px;
+    /* extremos redondeados */
+    padding: 10px;
+    border: 2px solid var(--mercadona-yellow);
+    display: block;
+    width: 100%;
+    text-align: center;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.btn--cart:hover {
+    background-color: var(--mercadona-yellow);
+    color: #000;
+}
+
+/* === MENÚ LATERAL === */
+.category-list {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 10px 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 90px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+}
+
+.category-item__title {
+    width: 100%;
+    background: none;
+    border: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-align: left;
+    color: #333;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.category-item__title:hover {
+    background-color: #f6faf7;
+    color: var(--cucumber);
+}
+
+.category-subitem {
+    display: block;
+    padding: 6px 16px;
+    font-size: 0.9rem;
+    color: #555;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.category-subitem:hover {
+    background-color: #e6f4ec;
+    color: var(--cucumber);
+}

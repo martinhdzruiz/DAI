@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Categoría - {{ categoria }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    {% include "partials/sidebar.html" %}
+
+    <section class="col-md-9">
+        <h2 class="mb-4">{{ categoria }}</h2>
+
+        {% for sub, items in productosPorSubcategoria %}
+        <h4 class="mt-4">{{ sub }}</h4>
+        <div class="product-grid">
+            {% for p in items %}
+            {% include "partials/product-card.html" %}
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </section>
+</div>
+{% endblock %}

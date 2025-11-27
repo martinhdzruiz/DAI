@@ -1,0 +1,25 @@
+<aside class="col-md-3">
+    <h5 class="mb-3">Categorías</h5>
+    <div class="category-list">
+        {% for super, cats in supercategorias %}
+        <div class="category-item">
+            <button class="category-item__title" data-bs-toggle="collapse" data-bs-target="#super{{ loop.index }}"
+                aria-expanded="false" aria-controls="super{{ loop.index }}">
+                {{ super }}
+            </button>
+
+            <div class="collapse category-sublist" id="super{{ loop.index }}">
+                <ul>
+                    {% for cat in cats %}
+                    <li>
+                        <a href="/categoria/{{ cat }}" class="category-subitem">
+                            {{ cat }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</aside>
