@@ -1,4 +1,3 @@
-// tienda.js
 import express from "express";
 import nunjucks from "nunjucks";
 import session from "express-session";
@@ -10,36 +9,16 @@ import TiendaRouter from "./routes/router_tienda.js";
 import UsuariosRouter from "./routes/router_usuarios.js";
 import ApiRouter from "./routes/router_api.js";
 
-
-
-
 const app = express();
-import { swaggerSpec, swaggerUiMiddleware } from "./swagger.js";
 
-// Ruta Swagger UI
-app.use("/api-docs", swaggerUiMiddleware.serve, swaggerUiMiddleware.setup(swaggerSpec));
+// 🟢 1. Primero JSON y URL-encoded
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/productos", ApiRouter);
+// 🟢 2. Cookies
+app.use(cookieParser());
 
-import swaggerUi from "swagger-ui-express";
-import swaggerJsdoc from "swagger-jsdoc";
-
-const options = {
-    definition: {
-        openapi: "3.0.0",
-        info: {
-            title: "API Tienda",
-            version: "1.0.0",
-        },
-    },
-    apis: ["./routes/router_api.js"], // comentarios JSDoc
-};
-
-const specs = swaggerJsdoc(options);
-
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
-
-// 🧩 Middleware de sesión (para carrito o estado temporal)
+// 🟢 3. Sesión
 app.use(
     session({
         secret: "my-secret",
@@ -48,17 +27,13 @@ app.use(
     })
 );
 
-// Guardar la sesión en las plantillas (res.locals)
+// 🟢 4. Guardar sesión en plantillas
 app.use((req, res, next) => {
     res.locals.session = req.session;
     next();
 });
 
-// 🧩 Middleware para procesar formularios y cookies
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
-
-// 🔑 Middleware de autenticación con JWT
+// 🟢 5. Autenticación JWT
 const autenticacion = (req, res, next) => {
     const token = req.cookies.access_token;
     if (token) {
@@ -67,7 +42,7 @@ const autenticacion = (req, res, next) => {
             req.username = data.usuario;
             req.esAdmin = data.admin || false;
             app.locals.usuario = data.usuario;
-            app.locals.esAdmin = data.admin || false; // 💡 visible en plantillas
+            app.locals.esAdmin = data.admin || false;
         } catch (err) {
             app.locals.usuario = undefined;
             app.locals.esAdmin = false;
@@ -79,20 +54,38 @@ const autenticacion = (req, res, next) => {
     next();
 };
 
-app.use(express.json());
 app.use(autenticacion);
 
-// 🧠 Configuración de entorno y Nunjucks
-const IN = process.env.IN || "development";
+// 🟢 6. Swagger
+import { swaggerSpec, swaggerUiMiddleware } from "./swagger.js";
+app.use("/api-docs", swaggerUiMiddleware.serve, swaggerUiMiddleware.setup(swaggerSpec));
 
+import swaggerUi from "swagger-ui-express";
+import swaggerJsdoc from "swagger-jsdoc";
+const options = {
+    definition: {
+        openapi: "3.0.0",
+        info: {
+            title: "API Tienda",
+            version: "1.0.0",
+        },
+    },
+    apis: ["./routes/router_api.js"],
+};
+const specs = swaggerJsdoc(options);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+
+// 🟢 7. AHORA SÍ: montar API
+app.use("/api/productos", ApiRouter);
+
+// 🟢 8. Configurar Nunjucks
+const IN = process.env.IN || "development";
 const env = nunjucks.configure("views", {
     autoescape: true,
     noCache: IN === "development",
     watch: IN === "development",
     express: app,
 });
-
-// Filtro personalizado: suma de campos numéricos (para carrito, totales…)
 env.addFilter("sum", function (array, attr = null, fallback = null) {
     if (!array) return 0;
     return array
@@ -103,33 +96,28 @@ env.addFilter("sum", function (array, attr = null, fallback = null) {
         }, 0)
         .toFixed(2);
 });
-
 app.set("view engine", "html");
 
-// 🧱 Rutas principales
+// 🟢 9. Rutas principales
 app.use("/", TiendaRouter);
-app.use("/usuarios", UsuariosRouter); // rutas de login/registro/logout
+app.use("/usuarios", UsuariosRouter);
 app.get("/login", (req, res) => {
     res.redirect("/usuarios/login");
 });
 
-
-// Archivos estáticos (CSS, JS, imágenes)
+// 🟢 10. Archivos estáticos
 app.use("/static", express.static("public"));
 
-// --- Test ---
+// Test
 app.get("/hola", (req, res) => res.send("Hola desde el servidor 🚀"));
 app.get("/test", (req, res) => res.render("test.html"));
 
-// --- Inicio del servidor ---
+// 🟢 11. Inicio servidor
 const PORT = process.env.PORT || 8080;
-
 const start = async () => {
     await connectDB();
-
     app.listen(PORT, () => {
         console.log(`✅ Servidor ejecutándose en http://localhost:${PORT}`);
     });
 };
-
 start();

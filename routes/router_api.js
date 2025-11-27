@@ -170,20 +170,33 @@ router.delete("/:id", async (req, res) => {
  *         description: Producto actualizado
  */
 router.put("/:id", async (req, res) => {
+    console.log("🔥 PUT /api/productos/:id ha llegado al router REAL");
+
+
     try {
-        const { precio_euros, precio_rebajado } = req.body;
+        const cambios = {};
+
+        if (typeof req.body.precio_euros !== "undefined") {
+            cambios.precio_euros = req.body.precio_euros;
+        }
+
+        if (typeof req.body.precio_rebajado !== "undefined") {
+            cambios.precio_rebajado = req.body.precio_rebajado;
+        }
 
         const actualizado = await Producto.findByIdAndUpdate(
             req.params.id,
-            { precio_euros, precio_rebajado },
-            { new: true }
+            cambios,
+            { new: true, runValidators: true }
         );
+
 
         if (!actualizado) return res.status(404).json({ error: "Producto no encontrado" });
 
         res.json(actualizado);
 
     } catch (err) {
+        console.error("❌ ERROR REAL EN PUT:", err);
         res.status(400).json({ error: "ID inválido" });
     }
 });
