@@ -11,14 +11,14 @@ import ApiRouter from "./routes/router_api.js";
 
 const app = express();
 
-// 🟢 1. Primero JSON y URL-encoded
+// Primero JSON y URL-encoded
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// 🟢 2. Cookies
+// Cookies
 app.use(cookieParser());
 
-// 🟢 3. Sesión
+// Sesión
 app.use(
     session({
         secret: "my-secret",
@@ -27,13 +27,13 @@ app.use(
     })
 );
 
-// 🟢 4. Guardar sesión en plantillas
+//  Guardar sesión en plantillas
 app.use((req, res, next) => {
     res.locals.session = req.session;
     next();
 });
 
-// 🟢 5. Autenticación JWT
+// Autenticación JWT
 const autenticacion = (req, res, next) => {
     const token = req.cookies.access_token;
     if (token) {
@@ -56,7 +56,7 @@ const autenticacion = (req, res, next) => {
 
 app.use(autenticacion);
 
-// 🟢 6. Swagger
+// Swagger
 import { swaggerSpec, swaggerUiMiddleware } from "./swagger.js";
 app.use("/api-docs", swaggerUiMiddleware.serve, swaggerUiMiddleware.setup(swaggerSpec));
 
@@ -75,10 +75,10 @@ const options = {
 const specs = swaggerJsdoc(options);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
-// 🟢 7. AHORA SÍ: montar API
+// AHORA SÍ: montar API
 app.use("/api/productos", ApiRouter);
 
-// 🟢 8. Configurar Nunjucks
+// Configurar Nunjucks
 const IN = process.env.IN || "development";
 const env = nunjucks.configure("views", {
     autoescape: true,
@@ -98,21 +98,21 @@ env.addFilter("sum", function (array, attr = null, fallback = null) {
 });
 app.set("view engine", "html");
 
-// 🟢 9. Rutas principales
+// Rutas principales
 app.use("/", TiendaRouter);
 app.use("/usuarios", UsuariosRouter);
 app.get("/login", (req, res) => {
     res.redirect("/usuarios/login");
 });
 
-// 🟢 10. Archivos estáticos
+//  Archivos estáticos
 app.use("/static", express.static("public"));
 
 // Test
 app.get("/hola", (req, res) => res.send("Hola desde el servidor 🚀"));
 app.get("/test", (req, res) => res.render("test.html"));
 
-// 🟢 11. Inicio servidor
+// Inicio servidor
 const PORT = process.env.PORT || 8080;
 const start = async () => {
     await connectDB();
