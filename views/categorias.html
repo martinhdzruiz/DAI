@@ -7,7 +7,10 @@
     {% include "partials/sidebar.html" %}
 
     <section class="col-md-9">
-        <h2 class="mb-4">Productos destacados</h2>
+        <h2 id="titulo-busqueda" class="mb-4">Productos destacados</h2>
+
+        <div id="contenido-dinamico">
+        
         <div class="product-grid">
             {% for p in productos %}
             {% include "partials/product-card.html" %}
@@ -19,6 +22,7 @@
             {% for p in productosRebajados %}
             {% include "partials/product-card.html" %}
             {% endfor %}
+        </div>
         </div>
     </section>
 </div>

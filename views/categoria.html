@@ -7,7 +7,9 @@
     {% include "partials/sidebar.html" %}
 
     <section class="col-md-9">
-        <h2 class="mb-4">{{ categoria }}</h2>
+        <h2 id="titulo-busqueda" class="mb-4">{{ categoria }}</h2>
+
+        <div id="contenido-dinamico">
 
         {% for sub, items in productosPorSubcategoria %}
         <h4 class="mt-4">{{ sub }}</h4>
@@ -17,6 +19,7 @@
             {% endfor %}
         </div>
         {% endfor %}
+        </div>
     </section>
 </div>
 {% endblock %}

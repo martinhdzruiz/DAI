@@ -1,49 +1,52 @@
-console.log("🔎 busqueda.js cargado");
+console.log("🔎 busqueda.js ACTIVO (búsqueda desde 1 letra + título dinámico)");
 
 const input = document.getElementById("buscador");
-const contador = document.getElementById("contador");
-const resultados = document.getElementById("resultados");
-const mensajeInfo = document.getElementById("mensaje-info");
-const loader = document.getElementById("loader");
+const zona = document.getElementById("contenido-dinamico");
+const titulo = document.getElementById("titulo-busqueda");
 
-if (input) {
+if (!input || !zona) {
+    console.warn("⛔ No hay buscador o zona dinámica en esta página.");
+} else {
+
+    let contenidoOriginal = zona.innerHTML;
+    let tituloOriginal = titulo ? titulo.textContent : "";
+
+    // 👉 1. ENTER NO navega
+    input.addEventListener("keydown", e => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+        }
+    });
+
+    // 👉 2. Búsqueda anticipada desde 1 letra
     input.addEventListener("input", async () => {
         const texto = input.value.trim();
 
-        // Si menos de 3 caracteres: no buscamos
-        if (texto.length < 3) {
-            resultados.innerHTML = "";
-            contador.classList.add("hidden");
-            loader.classList.add("hidden");
-            mensajeInfo.textContent = "Escribe al menos 3 caracteres para iniciar la búsqueda.";
-            mensajeInfo.classList.remove("hidden");
+        // Si está vacío → restaurar el contenido original
+        if (texto.length === 0) {
+            zona.innerHTML = contenidoOriginal;
+            if (titulo) titulo.textContent = tituloOriginal;
             return;
         }
 
-        // Preparar UI mientras busca
-        mensajeInfo.classList.add("hidden");
-        loader.classList.remove("hidden");
-        contador.classList.add("hidden");
-        resultados.innerHTML = "";
-
         try {
             const res = await fetch(`/api/productos/busqueda-anticipada/${encodeURIComponent(texto)}`);
-            const datos = await res.json();
+            const productos = await res.json();
 
-            loader.classList.add("hidden");
-            contador.classList.remove("hidden");
-            contador.textContent = `${datos.length} productos encontrados`;
+            // 👉 Actualizar el título dinámico
+            if (titulo) titulo.textContent = `Resultados para: "${texto}"`;
 
-            if (!Array.isArray(datos) || datos.length === 0) {
-                resultados.innerHTML = "";
-                mensajeInfo.textContent = "No se encontraron productos para esa búsqueda.";
-                mensajeInfo.classList.remove("hidden");
+            // 👉 Sin resultados
+            if (!productos.length) {
+                zona.innerHTML = `<p>No se encontraron productos.</p>`;
                 return;
             }
 
-            // Renderizar resultados usando TUS product-card
-            resultados.innerHTML = datos
-                .map(p => `
+            // 👉 Mostrar resultados
+            zona.innerHTML = `
+                <h3>${productos.length} productos encontrados</h3>
+                <div class="product-grid">
+                ${productos.map(p => `
                     <div class="product-card" onclick="location.href='/producto/${p._id}'">
                         <img src="${p.url_img}" alt="${p.texto_1}">
 
@@ -56,24 +59,22 @@ if (input) {
                                     ? `
                                         <span class="product-card__price-old">${p.precio_euros} €</span>
                                         <span class="precio-valor">${p.precio_rebajado} €</span>
-                                    `
+                                      `
                                     : `
                                         <span class="precio-valor">${p.precio_euros} €</span>
                                         <span class="precio-unidad">${p.unidad_medida}</span>
-                                    `
+                                      `
                             }
                         </div>
 
                         <div class="btn--cart">Añadir al carrito</div>
                     </div>
-                `)
-                .join("");
+                `).join("")}
+                </div>
+            `;
 
         } catch (err) {
-            console.error("❌ Error en la búsqueda anticipada:", err);
-            loader.classList.add("hidden");
-            mensajeInfo.textContent = "Ha ocurrido un error al buscar productos.";
-            mensajeInfo.classList.remove("hidden");
+            console.error("❌ Error en búsqueda:", err);
         }
     });
 }

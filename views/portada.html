@@ -5,19 +5,27 @@
 {% block content %}
 <div class="row">
     <section class="col-md-12">
-        <h2 class="mb-4">Productos destacados</h2>
-        <div class="product-grid">
-            {% for p in productos %}
-            {% include "partials/product-card.html" %}
-            {% endfor %}
-        </div>
+        
 
-        <h2 class="mb-4 mt-5">Productos rebajados</h2>
-        <div class="product-grid">
-            {% for p in productosRebajados %}
-            {% include "partials/product-card.html" %}
-            {% endfor %}
-        </div>
+            <h2 id="titulo-busqueda" class="mb-4">Productos del momento</h2>
+            <div id="contenido-dinamico">
+                <p class="producto-detalle__subtitulo" >Selección de productos destacados.</p>
+                <div class="product-grid">
+                    {% for p in productos %}
+                    {% include "partials/product-card.html" %}
+                    {% endfor %}
+                </div>
+
+                <h2 class="mb-4 mt-5">Productos rebajados</h2>
+                <p class="producto-detalle__subtitulo" >Selección de productos rebajados.</p>
+                <div class="product-grid">
+                    {% for p in productosRebajados %}
+                    {% include "partials/product-card.html" %}
+                    {% endfor %}
+                </div>
+            </div>
+
     </section>
+
 </div>
 {% endblock %}
