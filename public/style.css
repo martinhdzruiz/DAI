@@ -306,3 +306,7 @@ body {
     background-color: #e6f4ec;
     color: var(--cucumber);
 }
+
+.dropdown-item-header:hover {
+    background-color: #f5f5f5;
+}

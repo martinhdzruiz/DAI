@@ -6,29 +6,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Búsqueda anticipada</title>
 
-    <!-- Tailwind on-the-fly -->
+    <!-- Viento de cola Tailwind -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@unocss/reset/tailwind.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@unocss/runtime"></script>
+
+    <!-- Tu CSS de la tienda -->
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 
-<body class="p-10 bg-gray-50">
+<body class="min-h-screen bg-gray-50">
 
-    <h1 class="text-2xl font-bold mb-6">Búsqueda anticipada</h1>
+    <main class="max-w-5xl mx-auto p-6">
+        <h1 class="text-2xl font-bold mb-4">Búsqueda anticipada</h1>
 
-    <!-- Barra de búsqueda -->
-    <div class="max-w-md">
-        <div class="flex items-center rounded-xl border px-4 py-2 bg-white shadow">
-            <span class="text-gray-400">🔍</span>
-            <input id="buscador" type="text" placeholder="Buscar productos…"
-                class="ml-2 w-full outline-none p-2 text-gray-700">
+        <!-- Barra de búsqueda -->
+        <div class="mb-4">
+            <div class="flex items-center rounded-xl border px-4 py-2 bg-white shadow-sm">
+                <span class="text-gray-400 mr-2">🔍</span>
+                <input id="buscador" type="text" placeholder="Buscar productos…"
+                    class="flex-1 outline-none p-2 text-gray-700 bg-transparent">
+            </div>
+
+            <!-- Mensaje de ayuda -->
+            <p id="mensaje-info" class="mt-2 text-sm text-gray-500">
+                Escribe al menos 3 caracteres para iniciar la búsqueda.
+            </p>
+
+            <!-- Contador de resultados -->
+            <p id="contador" class="mt-2 text-sm font-medium text-gray-700 hidden"></p>
+
+            <!-- Loader -->
+            <p id="loader" class="mt-2 text-sm text-gray-500 hidden">
+                Buscando productos…
+            </p>
         </div>
-    </div>
 
-    <!-- Contador -->
-    <p id="contador" class="mt-4 text-lg font-medium text-gray-700"></p>
-
-    <!-- Contenedor de resultados futuros -->
-    <div id="resultados" class="product-grid mt-4"></div>
+        <!-- Resultados en grid usando TU CSS -->
+        <div id="resultados" class="product-grid mt-4"></div>
+    </main>
 
     <script src="/static/js/busqueda.js"></script>
 </body>
